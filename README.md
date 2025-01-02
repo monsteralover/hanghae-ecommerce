@@ -1,13 +1,36 @@
-## 프로젝트
+## 마일스톤
 
-## Getting Started
+![img.png](milestone.png)
 
-### Prerequisites
+## 이벤트 스토밍
 
-#### Running Docker Containers
+![img.png](event-storming.png)
 
-`local` profile 로 실행하기 위하여 인프라가 설정되어 있는 Docker 컨테이너를 실행해주셔야 합니다.
+## 유즈 케이스
 
-```bash
-docker-compose up -d
-```
+![img.png](use-case.png)
+
+## 도메인 협력 관계
+
+![img.png](domain-cooperate.png)
+
+## 시퀀스 다이어그램
+
+### 잔액 충전, 조회
+
+![img.png](balance.png)
+
+### 상품 조회
+
+![img.png](product-search.png)
+
+### 쿠폰 발급 조회
+
+![img.png](coupon.png)
+
+### 상품 주문, 결제
+
+![img.png](order.png)
+
+### 상위 상품 조회
+![img.png](best-product.png)
