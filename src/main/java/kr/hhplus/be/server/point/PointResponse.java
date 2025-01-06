@@ -1,11 +1,11 @@
-package kr.hhplus.be.server.balance;
+package kr.hhplus.be.server.point;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BalanceResponse {
+public class PointResponse {
     private Long userId;
-    private Long userBalance;
+    private Long userPoint;
 }

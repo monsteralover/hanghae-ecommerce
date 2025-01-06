@@ -1,10 +1,10 @@
-package kr.hhplus.be.server.balance;
+package kr.hhplus.be.server.point;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class BalanceChargeRequest {
+public class PointChargeRequest {
     private Long amount;
 }
