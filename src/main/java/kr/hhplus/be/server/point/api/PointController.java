@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.point;
+package kr.hhplus.be.server.point.api;
 
 import kr.hhplus.be.server.ApiResponse;
 import org.springframework.web.bind.annotation.*;
