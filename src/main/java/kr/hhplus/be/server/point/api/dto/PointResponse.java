@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.point.api;
+package kr.hhplus.be.server.point.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

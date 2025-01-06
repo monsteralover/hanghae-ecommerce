@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.point.api;
+package kr.hhplus.be.server.point.api.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.point.api;
 
 import kr.hhplus.be.server.ApiResponse;
+import kr.hhplus.be.server.point.api.dto.PointChargeRequest;
+import kr.hhplus.be.server.point.api.dto.PointResponse;
 import org.springframework.web.bind.annotation.*;
 
 import static kr.hhplus.be.server.ApiResponseCodeMessage.INVALID_CHARGE_AMOUNT;
