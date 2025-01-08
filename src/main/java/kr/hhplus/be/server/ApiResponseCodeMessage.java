@@ -7,6 +7,8 @@ public enum ApiResponseCodeMessage {
 
     //balance 2000
     INVALID_CHARGE_AMOUNT(2001, "충전액이 올바르지 않습니다."),
+    MAX_CHARGE_AMOUNT(2002, "최대 충전 금액을 초과하였습니다."),
+    MIN_CHARGE_AMOUNT(2003, "최소 충전금액보다 부족합니다."),
 
     //coupon 3000
     OUT_OF_COUPON(3001, "쿠폰이 모두 소진되었습니다."),
