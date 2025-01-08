@@ -1,7 +1,5 @@
 package kr.hhplus.be.server.point.service;
 
-import kr.hhplus.be.server.ApiException;
-import kr.hhplus.be.server.ApiResponseCodeMessage;
 import kr.hhplus.be.server.point.domain.Point;
 import kr.hhplus.be.server.point.repository.PointRepository;
 import kr.hhplus.be.server.point.service.dto.PointResponse;
@@ -15,7 +13,7 @@ public class PointReadService {
 
     public PointResponse getUserPoint(final Long userId) {
         final Point point = pointRepository.getByUserId(userId)
-                .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.INVALID_USER));
+                .orElse(Point.create(userId));
 
         return PointResponse.builder()
                 .userId(point.getUserId())

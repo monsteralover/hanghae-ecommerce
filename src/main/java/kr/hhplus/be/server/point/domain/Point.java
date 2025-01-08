@@ -39,13 +39,15 @@ public class Point extends BaseEntity {
     public void charge(final Long amount) {
         int maxChargeAmount = 100000000;
         int minChargeAmount = 1000;
-        if (amount >= maxChargeAmount) {
+        
+        final long updatedPoint = this.point + amount;
+        if (updatedPoint > maxChargeAmount) {
             throw new ApiException(ApiResponseCodeMessage.MAX_CHARGE_AMOUNT);
         }
         if (amount < minChargeAmount) {
             throw new ApiException(ApiResponseCodeMessage.MIN_CHARGE_AMOUNT);
         }
 
-        this.point = this.point + amount;
+        this.point = updatedPoint;
     }
 }
