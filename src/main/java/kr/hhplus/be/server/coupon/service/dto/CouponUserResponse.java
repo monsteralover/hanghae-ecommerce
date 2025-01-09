@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.coupon.facade;
+package kr.hhplus.be.server.coupon.service.dto;
 
 import kr.hhplus.be.server.coupon.domain.Coupon;
 import kr.hhplus.be.server.coupon.domain.CouponIssue;
@@ -13,7 +13,7 @@ public record CouponUserResponse(
         Integer discountAmount,
         LocalDate couponExpireDate) {
 
-    public static List<CouponUserResponse> toCouponResponse(List<CouponIssue> couponIssues) {
+    public static List<CouponUserResponse> from(List<CouponIssue> couponIssues) {
         return couponIssues.stream().map(couponIssue -> {
             final Coupon coupon = couponIssue.getCoupon();
             return new CouponUserResponse(coupon.getId(), coupon.getCouponName(), coupon.getDiscountAmount(),

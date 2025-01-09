@@ -15,4 +15,9 @@ public class CouponIssueRepositoryImpl implements CouponIssueRepository {
     public List<CouponIssue> getUsableCouponsForUser(final Long userId) {
         return couponIssueJpaRepository.findAllByUserIdAndUsed(userId, false);
     }
+
+    @Override
+    public CouponIssue save(final CouponIssue couponIssue) {
+        return couponIssueJpaRepository.save(couponIssue);
+    }
 }
