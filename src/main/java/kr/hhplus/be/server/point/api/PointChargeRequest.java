@@ -1,9 +1,11 @@
 package kr.hhplus.be.server.point.api;
 
 import kr.hhplus.be.server.point.facade.PointChargeFacadeRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class PointChargeRequest {
     public PointChargeRequest() {
     }
