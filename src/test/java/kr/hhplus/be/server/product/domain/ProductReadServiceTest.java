@@ -1,10 +1,10 @@
 package kr.hhplus.be.server.product.domain;
 
 
-import kr.hhplus.be.server.product.service.dto.ProductResponse;
 import kr.hhplus.be.server.product.repository.ProductRepository;
 import kr.hhplus.be.server.product.service.PaginationVerification;
 import kr.hhplus.be.server.product.service.ProductReadService;
+import kr.hhplus.be.server.product.service.dto.ProductResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,7 +72,7 @@ class ProductReadServiceTest {
                         .price(10000)
                         .productStock(ProductStock.builder()
                                 .stockQuantity(10)
-                                .accumulatedSoldStock(0L)
+                                .accumulatedSoldCount(0L)
                                 .build())
                         .build(),
                 Product.builder()
@@ -81,7 +81,7 @@ class ProductReadServiceTest {
                         .price(20000)
                         .productStock(ProductStock.builder()
                                 .stockQuantity(10)
-                                .accumulatedSoldStock(0L)
+                                .accumulatedSoldCount(0L)
                                 .build())
                         .build()
         );

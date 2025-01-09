@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepository {
@@ -15,4 +17,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Page<Product> getProductsPagination(final Pageable pageable) {
         return productJpaRepository.findAll(pageable);
     }
+
+    @Override
+    public List<Product> getTopFiveProducts() {
+        return productJpaRepository.getTopFiveProducts();
+    }
+
+
 }

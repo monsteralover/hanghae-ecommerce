@@ -21,7 +21,7 @@ public class Product extends BaseEntity {
     @NotNull
     private int price;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private ProductStock productStock;
 
 }

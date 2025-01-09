@@ -14,7 +14,7 @@ public class ProductStock extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -23,5 +23,7 @@ public class ProductStock extends BaseEntity {
     private int stockQuantity;
 
     @NotNull
-    private Long accumulatedSoldStock;
+    @Getter
+    private long accumulatedSoldCount;
+
 }

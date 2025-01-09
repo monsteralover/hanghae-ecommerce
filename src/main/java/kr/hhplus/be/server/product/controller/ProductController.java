@@ -2,6 +2,7 @@ package kr.hhplus.be.server.product.controller;
 
 import kr.hhplus.be.server.ApiResponse;
 import kr.hhplus.be.server.product.service.ProductReadService;
+import kr.hhplus.be.server.product.service.dto.ProductMostSoldResponse;
 import kr.hhplus.be.server.product.service.dto.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +24,8 @@ public class ProductController {
     }
 
     @GetMapping("/best-products")
-    public ApiResponse<List<ProductResponse>> getBestProducts() {
-
-        return ApiResponse.ok(
-                List.of(
-                        new ProductResponse(1L, "맛좋은 딸기", 12500, 3),
-                        new ProductResponse(2L, "맛좋은 바나나", 3500, 31),
-                        new ProductResponse(3L, "맛좋은 블루베리", 4500, 34)
-                ));
+    public ApiResponse<List<ProductMostSoldResponse>> getBestProducts() {
+        return ApiResponse.ok(productReadService.getMostSoldProducts());
     }
 
 
