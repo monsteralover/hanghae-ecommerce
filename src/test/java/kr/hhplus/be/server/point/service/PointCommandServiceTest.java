@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.point.service;
 
+import kr.hhplus.be.server.ApiException;
+import kr.hhplus.be.server.ApiResponseCodeMessage;
 import kr.hhplus.be.server.point.domain.Point;
 import kr.hhplus.be.server.point.repository.PointRepository;
 import kr.hhplus.be.server.point.service.dto.PointChargeServiceRequest;
@@ -16,8 +18,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PointCommandServiceTest {
@@ -83,5 +88,51 @@ class PointCommandServiceTest {
         verify(pointRepository).getByUserId(userId);
         verify(pointRepository).save(any(Point.class));
     }
+
+
+    @Test
+    @DisplayName("포인트 사용시 잔액이 충분할 경우 포인트가 차감되어야 한다")
+    void usePoint_ShouldDeductPoints_WhenSufficientBalance() {
+
+        Long userId = 1L;
+        Long initialPoints = 10000L;
+        Long deductAmount = 5000L;
+
+        Point point = Point.builder()
+                .userId(userId)
+                .point(initialPoints)
+                .build();
+
+        when(pointRepository.getByUserId(userId)).thenReturn(Optional.of(point));
+
+
+        pointCommandService.usePoint(userId, deductAmount);
+
+
+        assertEquals(5000L, point.getPoint());
+        verify(pointRepository).save(point);
+    }
+
+    @Test
+    @DisplayName("포인트 사용시 잔액이 부족할 경우 LACK_OF_BALANCE 예외가 발생해야 한다")
+    void usePoint_ShouldThrowException_WhenInsufficientBalance() {
+        // given
+        Long userId = 1L;
+        Long initialPoints = 1000L;
+        Long deductAmount = 2000L;
+
+        Point point = Point.builder()
+                .userId(userId)
+                .point(initialPoints)
+                .build();
+
+        when(pointRepository.getByUserId(userId)).thenReturn(Optional.of(point));
+
+        //then
+        assertThatThrownBy(() -> pointCommandService.usePoint(userId, deductAmount))
+                .isInstanceOf(ApiException.class)
+                .hasMessage(ApiResponseCodeMessage.LACK_OF_BALANCE.getMessage());
+    }
+
 
 }

@@ -17,12 +17,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CouponIssueCommandServiceTest {
@@ -78,6 +81,66 @@ class CouponIssueCommandServiceTest {
                 .hasMessage(ApiResponseCodeMessage.INVALID_USER.getMessage());
     }
 
+    @Test
+    @DisplayName("쿠폰 사용이 정상적으로 동작한다")
+    void useCoupon_Success() {
+        // given
+        final Long userId = 1L;
+        final Long couponId = 1L;
+        final int discountAmount = 10000;
+
+        final User user = createUser();
+        final Coupon coupon = createCoupon(discountAmount);
+        ReflectionTestUtils.setField(coupon, "expireDate", LocalDate.now().plusDays(30));
+        final CouponIssue couponIssue = createCouponIssue(user, coupon);
+
+        given(couponIssueRepository.getByIdWithLock(couponId)).willReturn(couponIssue);
+
+        // when
+        final int result = couponIssueCommandService.useCoupon(userId, couponId);
+
+        // then
+        assertThat(result).isEqualTo(discountAmount);
+        assertThat(couponIssue.isUsed()).isTrue();
+        verify(couponIssueRepository).save(couponIssue);
+    }
+
+    @Test
+    @DisplayName("다른 사용자의 쿠폰을 사용하려고 하면 예외가 발생한다")
+    void useCoupon_WithDifferentUser_ThrowsException() {
+        // given
+        final Long ownerId = 1L;
+        final Long differentUserId = 2L;
+        final Long couponId = 1L;
+
+        final User owner = createUser();
+        final Coupon coupon = createCoupon(10000);
+        final CouponIssue couponIssue = createCouponIssue(owner, coupon);
+
+        given(couponIssueRepository.getByIdWithLock(couponId)).willReturn(couponIssue);
+
+        // when & then
+        assertThatThrownBy(() -> couponIssueCommandService.useCoupon(differentUserId, couponId))
+                .isInstanceOf(ApiException.class)
+                .hasMessage(ApiResponseCodeMessage.INVALID_CHARGE_AMOUNT.getMessage());
+
+        assertThat(couponIssue.isUsed()).isFalse();
+        verify(couponIssueRepository, never()).save(any());
+    }
+
+    private CouponIssue createCouponIssue(User user, Coupon coupon) {
+        final CouponIssue couponIssue = CouponIssue.create(user, coupon);
+        ReflectionTestUtils.setField(couponIssue, "id", 1L);
+        return couponIssue;
+    }
+
+    private Coupon createCoupon(int discountAmount) {
+        final Coupon coupon = new Coupon();
+        ReflectionTestUtils.setField(coupon, "id", 1L);
+        ReflectionTestUtils.setField(coupon, "discountAmount", discountAmount);
+        return coupon;
+    }
+
     private User createUser() {
         final User user = new User();
         ReflectionTestUtils.setField(user, "id", 1L);
@@ -89,4 +152,5 @@ class CouponIssueCommandServiceTest {
         ReflectionTestUtils.setField(coupon, "id", 1L);
         return coupon;
     }
+
 }
