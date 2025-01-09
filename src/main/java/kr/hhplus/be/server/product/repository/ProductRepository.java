@@ -12,4 +12,6 @@ public interface ProductRepository {
     List<Product> getTopFiveProducts();
 
     Product getById(Long productId);
+
+    void save(Product product);
 }

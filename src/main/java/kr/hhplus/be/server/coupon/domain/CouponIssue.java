@@ -22,6 +22,7 @@ import lombok.*;
 public class CouponIssue extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
     @ManyToOne

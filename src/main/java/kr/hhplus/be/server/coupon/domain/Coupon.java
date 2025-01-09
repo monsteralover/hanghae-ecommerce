@@ -7,11 +7,17 @@ import jakarta.persistence.Id;
 import kr.hhplus.be.server.ApiException;
 import kr.hhplus.be.server.ApiResponseCodeMessage;
 import kr.hhplus.be.server.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Coupon extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

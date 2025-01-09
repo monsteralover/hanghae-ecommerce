@@ -18,4 +18,9 @@ public class OrderRepositoryImpl implements OrderRepository {
     public void flush() {
         orderJpaRepository.flush();
     }
+
+    @Override
+    public Order findLatestOrderByUserId(final Long id) {
+        return orderJpaRepository.findAllByUserIdOrderByCreatedDateDesc(id).get(0);
+    }
 }

@@ -7,4 +7,6 @@ public interface OrderRepository {
     Long save(Order finalOrder);
 
     void flush();
+
+    Order findLatestOrderByUserId(Long id);
 }

@@ -31,5 +31,10 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.INVALID_PRODUCT_ID));
     }
 
+    @Override
+    public void save(final Product product) {
+        productJpaRepository.save(product);
+    }
+
 
 }

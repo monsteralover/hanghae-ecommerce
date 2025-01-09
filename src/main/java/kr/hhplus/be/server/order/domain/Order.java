@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.order.domain;
 
 import jakarta.persistence.*;
+import kr.hhplus.be.server.BaseEntity;
 import lombok.*;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -18,6 +19,7 @@ public class Order {
     private Long userId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @Getter
     private List<OrderItem> orderItems;
 
     private long totalAmount;
