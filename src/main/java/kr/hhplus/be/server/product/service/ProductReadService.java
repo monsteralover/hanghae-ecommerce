@@ -19,12 +19,12 @@ public class ProductReadService {
     public List<ProductResponse> getProducts(final int page, final int size) {
         final Pageable pageable = PaginationVerification.toPageable(page, size);
         final Page<Product> productsPagination = productRepository.getProductsPagination(pageable);
-        return ProductResponse.toProductResponse(productsPagination);
+        return ProductResponse.from(productsPagination);
     }
 
     public List<ProductMostSoldResponse> getMostSoldProducts() {
         final List<Product> topFiveProducts = productRepository.getTopFiveProducts();
-        return ProductMostSoldResponse.toProductMostSoldResponse(topFiveProducts);
+        return ProductMostSoldResponse.from(topFiveProducts);
     }
 
 }

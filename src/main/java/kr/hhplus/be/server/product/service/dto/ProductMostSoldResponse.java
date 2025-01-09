@@ -13,7 +13,7 @@ public record ProductMostSoldResponse(
         Integer remainingStock,
         Long accumulatedSoldCount
 ) {
-    public static List<ProductMostSoldResponse> toProductMostSoldResponse(final List<Product> products) {
+    public static List<ProductMostSoldResponse> from(final List<Product> products) {
         return products.stream().filter(Objects::nonNull).map(product -> {
             return new ProductMostSoldResponse(product.getId(), product.getName(), product.getPrice(),
                     product.getProductStock().getStockQuantity(),

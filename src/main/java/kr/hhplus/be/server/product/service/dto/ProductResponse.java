@@ -15,7 +15,7 @@ public record ProductResponse(
         Integer price,
         Integer remainingStock
 ) {
-    public static List<ProductResponse> toProductResponse(final Page<Product> products) {
+    public static List<ProductResponse> from(final Page<Product> products) {
         return products.stream().filter(Objects::nonNull).map(product -> {
             final Integer quantity = Optional.of(product)
                     .map(Product::getProductStock)
