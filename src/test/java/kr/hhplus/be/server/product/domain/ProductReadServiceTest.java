@@ -4,6 +4,7 @@ package kr.hhplus.be.server.product.domain;
 import kr.hhplus.be.server.product.repository.ProductRepository;
 import kr.hhplus.be.server.product.service.PaginationVerification;
 import kr.hhplus.be.server.product.service.ProductReadService;
+import kr.hhplus.be.server.product.service.dto.ProductMostSoldResponse;
 import kr.hhplus.be.server.product.service.dto.ProductResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ProductReadServiceTest {
@@ -42,7 +44,7 @@ class ProductReadServiceTest {
         // when
         final List<ProductResponse> productResponses = productReadService.getProducts(page, size);
         // then
-        assertThat(productResponses).hasSize(2);
+        assertThat(productResponses).hasSize(5);
         assertThat(productResponses.get(0)).extracting("productId", "productName", "price", "remainingStock")
                 .containsExactly(1L, "Product 1", 10000, 10);
     }
@@ -61,7 +63,24 @@ class ProductReadServiceTest {
         final List<ProductResponse> productResponses = productReadService.getProducts(page, size);
         // then
         assertThat(productResponses).isEmpty();
+    }
 
+    @DisplayName("상위상품을 조회 시 가장 많이 팔린 5가지 상품을 반환한다.")
+    @Test
+    void test() {
+        final List<Product> products = createProducts();
+
+        given(productRepository.getTopFiveProducts()).willReturn(products);
+
+        // when
+        List<ProductMostSoldResponse> results = productReadService.getMostSoldProducts();
+
+        // then
+        assertThat(results).hasSize(5);
+        assertThat(results.get(0).accumulatedSoldCount()).isEqualTo(100L);
+        assertThat(results.get(4).accumulatedSoldCount()).isEqualTo(1L);
+
+        verify(productRepository).getTopFiveProducts();
     }
 
     private List<Product> createProducts() {
@@ -72,16 +91,43 @@ class ProductReadServiceTest {
                         .price(10000)
                         .productStock(ProductStock.builder()
                                 .stockQuantity(10)
-                                .accumulatedSoldCount(0L)
+                                .accumulatedSoldCount(100L)
                                 .build())
                         .build(),
                 Product.builder()
                         .id(2L)
-                        .name("Product 1")
+                        .name("Product 2")
                         .price(20000)
                         .productStock(ProductStock.builder()
                                 .stockQuantity(10)
-                                .accumulatedSoldCount(0L)
+                                .accumulatedSoldCount(90L)
+                                .build())
+                        .build(),
+                Product.builder()
+                        .id(3L)
+                        .name("Product 3")
+                        .price(20000)
+                        .productStock(ProductStock.builder()
+                                .stockQuantity(10)
+                                .accumulatedSoldCount(20L)
+                                .build())
+                        .build(),
+                Product.builder()
+                        .id(4L)
+                        .name("Product 4")
+                        .price(20000)
+                        .productStock(ProductStock.builder()
+                                .stockQuantity(10)
+                                .accumulatedSoldCount(10L)
+                                .build())
+                        .build(),
+                Product.builder()
+                        .id(5L)
+                        .name("Product 5")
+                        .price(20000)
+                        .productStock(ProductStock.builder()
+                                .stockQuantity(10)
+                                .accumulatedSoldCount(1L)
                                 .build())
                         .build()
         );
