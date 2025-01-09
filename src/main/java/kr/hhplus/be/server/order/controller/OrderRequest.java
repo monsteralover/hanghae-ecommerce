@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.order.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import kr.hhplus.be.server.coupon.facade.OrderFacadeRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +14,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "주문 요청 정보")
 public class OrderRequest {
+    @Schema(description = "주문할 상품 목록")
     @JsonProperty("orderItems")
     private List<OrderRequestItems> orderItems;
+
+    @Schema(description = "적용할 쿠폰 ID")
     @JsonProperty("couponId")
     private long couponId;
 
