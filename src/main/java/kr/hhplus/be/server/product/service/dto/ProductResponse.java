@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.product.controller;
+package kr.hhplus.be.server.product.service.dto;
 
 public record ProductResponse(
         Long productId,

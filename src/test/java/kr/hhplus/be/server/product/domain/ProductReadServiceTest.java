@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.product.domain;
 
 
-import kr.hhplus.be.server.product.controller.ProductResponse;
+import kr.hhplus.be.server.product.service.dto.ProductResponse;
 import kr.hhplus.be.server.product.repository.ProductRepository;
 import kr.hhplus.be.server.product.service.PaginationVerification;
 import kr.hhplus.be.server.product.service.ProductReadService;
