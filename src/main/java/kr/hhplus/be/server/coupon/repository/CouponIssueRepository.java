@@ -11,4 +11,5 @@ public interface CouponIssueRepository {
 
     CouponIssue getByIdWithLock(long couponId);
 
+    long countByCouponId(Long id);
 }

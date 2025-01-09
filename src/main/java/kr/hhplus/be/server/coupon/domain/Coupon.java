@@ -32,6 +32,7 @@ public class Coupon extends BaseEntity {
 
     private int totalQuantity;
 
+    @Getter
     private int remainingQuantity;
 
     @Getter

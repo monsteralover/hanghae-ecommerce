@@ -5,7 +5,7 @@ import kr.hhplus.be.server.coupon.domain.Coupon;
 public interface CouponRepository {
     Coupon getCouponWithLock(Long couponId);
 
-    void save(Coupon coupon);
+    Coupon save(Coupon coupon);
 
     Coupon getCouponById(Long couponId);
 }

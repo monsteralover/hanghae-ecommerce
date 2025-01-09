@@ -28,4 +28,9 @@ public class CouponIssueRepositoryImpl implements CouponIssueRepository {
         return couponIssueJpaRepository.findById(couponId)
                 .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.INVALID_COUPON));
     }
+
+    @Override
+    public long countByCouponId(final Long couponId) {
+        return couponIssueJpaRepository.countByCouponId(couponId);
+    }
 }
