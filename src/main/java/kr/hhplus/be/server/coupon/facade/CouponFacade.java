@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.coupon.facade;
 
 import kr.hhplus.be.server.coupon.service.CouponCommandService;
+import kr.hhplus.be.server.coupon.service.CouponIssueCommandService;
 import kr.hhplus.be.server.coupon.service.CouponIssueReadService;
 import kr.hhplus.be.server.coupon.service.dto.CouponIssueResponse;
 import kr.hhplus.be.server.coupon.service.dto.CouponUserResponse;

@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.coupon.facade;
+package kr.hhplus.be.server.coupon.service;
 
 import kr.hhplus.be.server.ApiException;
 import kr.hhplus.be.server.ApiResponseCodeMessage;
