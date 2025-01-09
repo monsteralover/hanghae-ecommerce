@@ -2,6 +2,8 @@ package kr.hhplus.be.server.order.facade;
 
 import kr.hhplus.be.server.coupon.facade.OrderFacadeRequest;
 import kr.hhplus.be.server.coupon.service.CouponIssueCommandService;
+import kr.hhplus.be.server.order.service.dto.DataPlatform;
+import kr.hhplus.be.server.order.service.dto.OrderItemCommandService;
 import kr.hhplus.be.server.order.service.dto.SaveOrderResponse;
 import kr.hhplus.be.server.point.service.PointCommandService;
 import kr.hhplus.be.server.product.service.ProductStockCommandService;
@@ -18,8 +20,8 @@ public class OrderFacade {
     private final OrderItemCommandService orderItemCommandService;
     private final CouponIssueCommandService couponIssueCommandService;
     private final PointCommandService pointCommandService;
-
     private final ProductStockCommandService productStockCommandService;
+    private final DataPlatform dataPlatform;
 
     @Transactional
     public OrderResponse order(final OrderFacadeRequest request) {
@@ -34,6 +36,8 @@ public class OrderFacade {
         pointCommandService.usePoint(userId, saveOrderResponse.getPaymentAmount());
         //재고차감
         productStockCommandService.processSoldStock(request.getOrderItems());
+
+        dataPlatform.sendData(request);
 
         return new OrderResponse(saveOrderResponse.getOrderId());
     }

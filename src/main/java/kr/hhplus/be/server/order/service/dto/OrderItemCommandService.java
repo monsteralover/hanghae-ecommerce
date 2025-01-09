@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.order.facade;
+package kr.hhplus.be.server.order.service.dto;
 
 import kr.hhplus.be.server.ApiException;
 import kr.hhplus.be.server.ApiResponseCodeMessage;
