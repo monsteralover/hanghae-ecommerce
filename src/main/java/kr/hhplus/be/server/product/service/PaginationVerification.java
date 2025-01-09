@@ -11,6 +11,9 @@ public class PaginationVerification {
         if (page < 1 || size < 1) {
             throw new ApiException(ApiResponseCodeMessage.INVALID_PAGING_INFO);
         }
+        if (size > 1000) {
+            throw new ApiException(ApiResponseCodeMessage.MAX_PAGE_SIZE);
+        }
         return PageRequest.of(page - 1, size, Sort.by("id").descending());
     }
 }
