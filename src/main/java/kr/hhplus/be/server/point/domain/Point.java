@@ -1,9 +1,6 @@
 package kr.hhplus.be.server.point.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import kr.hhplus.be.server.ApiException;
 import kr.hhplus.be.server.ApiResponseCodeMessage;
 import kr.hhplus.be.server.BaseEntity;
@@ -14,6 +11,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
+@Table(name = "point", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "user_id")
+})
 public class Point extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +39,7 @@ public class Point extends BaseEntity {
     public void charge(final Long amount) {
         int maxChargeAmount = 100000000;
         int minChargeAmount = 1000;
-        
+
         final long updatedPoint = this.point + amount;
         if (updatedPoint > maxChargeAmount) {
             throw new ApiException(ApiResponseCodeMessage.MAX_CHARGE_AMOUNT);
@@ -49,5 +49,13 @@ public class Point extends BaseEntity {
         }
 
         this.point = updatedPoint;
+    }
+
+    public void usePoint(final long amount) {
+        final long balance = this.point - amount;
+        if (balance < 0) {
+            throw new ApiException(ApiResponseCodeMessage.LACK_OF_BALANCE);
+        }
+        this.point = balance;
     }
 }

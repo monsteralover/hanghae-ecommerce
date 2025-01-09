@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.order;
+package kr.hhplus.be.server.order.facade;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

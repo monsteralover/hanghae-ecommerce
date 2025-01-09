@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.coupon.domain;
 
 import jakarta.persistence.*;
+import kr.hhplus.be.server.ApiException;
+import kr.hhplus.be.server.ApiResponseCodeMessage;
 import kr.hhplus.be.server.BaseEntity;
 import kr.hhplus.be.server.user.domain.User;
 import lombok.*;
@@ -39,5 +41,17 @@ public class CouponIssue extends BaseEntity {
                 .user(user)
                 .coupon(coupon)
                 .used(false).build();
+    }
+
+    public void useCoupon(long userId) {
+        validateCouponForUser(userId);
+        coupon.validateCouponExpired();
+        this.used = true;
+    }
+
+    private void validateCouponForUser(long userId) {
+        if (!this.user.getId().equals(userId)) {
+            throw new ApiException(ApiResponseCodeMessage.INVALID_CHARGE_AMOUNT);
+        }
     }
 }

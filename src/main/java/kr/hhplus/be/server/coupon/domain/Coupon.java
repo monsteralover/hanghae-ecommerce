@@ -42,7 +42,7 @@ public class Coupon extends BaseEntity {
         }
     }
 
-    private void validateCouponExpired() {
+    public void validateCouponExpired() {
         if (this.getExpireDate().isBefore(LocalDate.now())) {
             throw new ApiException(ApiResponseCodeMessage.COUPON_EXPIRED);
         }

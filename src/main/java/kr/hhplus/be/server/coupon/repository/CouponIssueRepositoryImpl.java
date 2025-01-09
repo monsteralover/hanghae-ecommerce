@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.coupon.repository;
 
+import kr.hhplus.be.server.ApiException;
+import kr.hhplus.be.server.ApiResponseCodeMessage;
 import kr.hhplus.be.server.coupon.domain.CouponIssue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,5 +21,11 @@ public class CouponIssueRepositoryImpl implements CouponIssueRepository {
     @Override
     public CouponIssue save(final CouponIssue couponIssue) {
         return couponIssueJpaRepository.save(couponIssue);
+    }
+
+    @Override
+    public CouponIssue getByIdWithLock(final long couponId) {
+        return couponIssueJpaRepository.findById(couponId)
+                .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.INVALID_COUPON));
     }
 }

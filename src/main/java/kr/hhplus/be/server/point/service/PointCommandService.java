@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.point.service;
 
+import kr.hhplus.be.server.ApiException;
+import kr.hhplus.be.server.ApiResponseCodeMessage;
 import kr.hhplus.be.server.point.domain.Point;
 import kr.hhplus.be.server.point.repository.PointRepository;
 import kr.hhplus.be.server.point.service.dto.PointChargeServiceRequest;
@@ -23,5 +25,12 @@ public class PointCommandService {
                 .userId(savedPoint.getUserId())
                 .userPoint(savedPoint.getPoint())
                 .build();
+    }
+
+    public void usePoint(final long userId, final long amount) {
+        final Point point = pointRepository.getByUserId(userId)
+                .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.CHARGE_RECORD_NOT_EXIST));
+        point.usePoint(amount);
+        pointRepository.save(point);
     }
 }

@@ -27,4 +27,13 @@ public class CouponIssueCommandService {
         final CouponIssue savedCouponIssue = couponIssueRepository.save(couponIssue);
         return CouponIssueResponse.from(savedCouponIssue);
     }
+
+    public int useCoupon(final long userId, final long couponId) {
+
+        final CouponIssue couponIssue = couponIssueRepository.getByIdWithLock(couponId);
+        couponIssue.useCoupon(userId);
+        couponIssueRepository.save(couponIssue);
+
+        return couponIssue.getCoupon().getDiscountAmount();
+    }
 }

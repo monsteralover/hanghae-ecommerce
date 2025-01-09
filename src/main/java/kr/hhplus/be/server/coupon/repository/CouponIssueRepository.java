@@ -8,4 +8,7 @@ public interface CouponIssueRepository {
     List<CouponIssue> getUsableCouponsForUser(Long userId);
 
     CouponIssue save(CouponIssue couponIssue);
+
+    CouponIssue getByIdWithLock(long couponId);
+
 }

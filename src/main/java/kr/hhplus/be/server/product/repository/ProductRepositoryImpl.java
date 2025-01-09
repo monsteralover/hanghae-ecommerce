@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.product.repository;
 
+import kr.hhplus.be.server.ApiException;
+import kr.hhplus.be.server.ApiResponseCodeMessage;
 import kr.hhplus.be.server.product.domain.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public List<Product> getTopFiveProducts() {
         return productJpaRepository.getTopFiveProducts();
+    }
+
+    @Override
+    public Product getById(final Long productId) {
+        return productJpaRepository.findById(productId)
+                .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.INVALID_PRODUCT_ID));
     }
 
 

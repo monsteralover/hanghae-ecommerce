@@ -9,15 +9,18 @@ public enum ApiResponseCodeMessage {
     INVALID_CHARGE_AMOUNT(2001, "충전액이 올바르지 않습니다."),
     MAX_CHARGE_AMOUNT(2002, "최대 충전 금액을 초과하였습니다."),
     MIN_CHARGE_AMOUNT(2003, "최소 충전금액보다 부족합니다."),
+    CHARGE_RECORD_NOT_EXIST(2004, "충전기록이 존재하지 않습니다."),
+    LACK_OF_BALANCE(2005, "충전액이 부족합니다."),
 
     //coupon 3000
     OUT_OF_COUPON(3001, "쿠폰이 모두 소진되었습니다."),
     INVALID_COUPON(3002, "존재하지 않는 쿠폰입니다."),
     COUPON_EXPIRED(3002, "사용기한이 지난 쿠폰입니다."),
+    COUPON_USER_UNMATCHED(3003, "해당 사용자에게 부여된 쿠폰이 아닙니다."),
 
     //order 4000
     OUT_OF_STOCK(4001, "상품의 재고가 소진되었습니다."),
-    LACK_OF_BALANCE(4002, "충전액이 부족합니다."),
+    INVALID_PAYMENT_AMOUNT(4002, "쿠폰 할인액이 결재액보다 더 클 수 없습니다."),
 
 
     //product 5000
