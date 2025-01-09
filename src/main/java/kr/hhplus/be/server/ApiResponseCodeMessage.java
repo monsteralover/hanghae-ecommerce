@@ -19,7 +19,10 @@ public enum ApiResponseCodeMessage {
 
 
     //product 5000
-    INVALID_PRODUCT_ID(4002, "존재하지 않는 상품입니다.");
+    INVALID_PRODUCT_ID(4002, "존재하지 않는 상품입니다."),
+
+    //etc 6000
+    INVALID_PAGING_INFO(6001, "존재하지 않는 페이지입니다.");
 
     private final String message;
     private final Integer code;

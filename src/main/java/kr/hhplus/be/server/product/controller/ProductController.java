@@ -1,25 +1,24 @@
-package kr.hhplus.be.server.product;
+package kr.hhplus.be.server.product.controller;
 
 import kr.hhplus.be.server.ApiResponse;
+import kr.hhplus.be.server.product.service.ProductReadService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static kr.hhplus.be.server.ApiResponseCodeMessage.INVALID_PRODUCT_ID;
-
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
+    private final ProductReadService productReadService;
 
-    @GetMapping("/{productId}")
-    public ApiResponse<ProductResponse> getProductData(@PathVariable Long productId) {
-        if (productId < 1) {
-            return ApiResponse.badRequest(INVALID_PRODUCT_ID.getCode(), INVALID_PRODUCT_ID.getMessage());
-        }
-        return ApiResponse.ok(new ProductResponse(productId, "맛좋은 딸기", 12500, 3));
+    @GetMapping()
+    public ApiResponse<List<ProductResponse>> getProducts(@RequestParam int page, @RequestParam int size) {
+        return ApiResponse.ok(productReadService.getProducts(page, size));
     }
 
     @GetMapping("/best-products")
