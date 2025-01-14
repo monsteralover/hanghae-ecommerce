@@ -8,7 +8,7 @@ import kr.hhplus.be.server.coupon.repository.CouponIssueRepository;
 import kr.hhplus.be.server.coupon.repository.CouponRepository;
 import kr.hhplus.be.server.order.domain.Order;
 import kr.hhplus.be.server.order.repository.OrderRepository;
-import kr.hhplus.be.server.order.service.dto.DataPlatform;
+import kr.hhplus.be.server.order.service.DataPlatform;
 import kr.hhplus.be.server.point.domain.Point;
 import kr.hhplus.be.server.point.repository.PointRepository;
 import kr.hhplus.be.server.product.domain.Product;

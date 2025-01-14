@@ -1,8 +1,10 @@
-package kr.hhplus.be.server.order.service.dto;
+package kr.hhplus.be.server.order.service;
 
 import kr.hhplus.be.server.order.controller.OrderRequestItems;
 import kr.hhplus.be.server.order.domain.Order;
 import kr.hhplus.be.server.order.repository.OrderRepository;
+import kr.hhplus.be.server.order.service.dto.OrderServiceRequest;
+import kr.hhplus.be.server.order.service.dto.SaveOrderResponse;
 import kr.hhplus.be.server.product.domain.Product;
 import kr.hhplus.be.server.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
