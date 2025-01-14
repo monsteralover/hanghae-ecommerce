@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 public class OrderServiceRequest {
     private List<OrderRequestItems> orderItems;
-    private long couponId;
+    private Long couponId;
     private long userId;
     private int discountAmount;
 

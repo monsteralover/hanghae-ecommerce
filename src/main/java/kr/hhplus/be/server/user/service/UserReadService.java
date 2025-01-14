@@ -15,4 +15,9 @@ public class UserReadService {
         userRepository.findUserById(userId)
                 .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.INVALID_USER));
     }
+
+    public void findByUserIdWithLock(final long userId) {
+        userRepository.findByUserIdWithLock(userId)
+                .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.INVALID_USER));
+    }
 }

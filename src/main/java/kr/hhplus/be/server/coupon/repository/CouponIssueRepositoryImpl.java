@@ -24,7 +24,7 @@ public class CouponIssueRepositoryImpl implements CouponIssueRepository {
     }
 
     @Override
-    public CouponIssue getByIdWithLock(final long couponId) {
+    public CouponIssue getById(final long couponId) {
         return couponIssueJpaRepository.findById(couponId)
                 .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.INVALID_COUPON));
     }
