@@ -8,4 +8,6 @@ public interface UserRepository {
     Optional<User> findUserById(Long userId);
 
     User save(User user);
+
+    Optional<User> findByUserIdWithLock(long userId);
 }

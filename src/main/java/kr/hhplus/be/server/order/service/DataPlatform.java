@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.order.service.dto;
+package kr.hhplus.be.server.order.service;
 
 import kr.hhplus.be.server.coupon.facade.OrderFacadeRequest;
 import org.springframework.stereotype.Component;

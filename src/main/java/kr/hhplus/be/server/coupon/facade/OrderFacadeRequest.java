@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 public class OrderFacadeRequest {
     private List<OrderRequestItems> orderItems;
-    private long couponId;
+    private Long couponId;
     private long userId;
 
     public OrderServiceRequest toOrderServiceRequest(final int discountAmount) {

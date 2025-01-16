@@ -8,7 +8,7 @@ import kr.hhplus.be.server.coupon.repository.CouponIssueRepository;
 import kr.hhplus.be.server.coupon.repository.CouponRepository;
 import kr.hhplus.be.server.order.domain.Order;
 import kr.hhplus.be.server.order.repository.OrderRepository;
-import kr.hhplus.be.server.order.service.dto.DataPlatform;
+import kr.hhplus.be.server.order.service.DataPlatform;
 import kr.hhplus.be.server.point.domain.Point;
 import kr.hhplus.be.server.point.repository.PointRepository;
 import kr.hhplus.be.server.product.domain.Product;
@@ -99,7 +99,7 @@ public class OrderControllerIntegrationTest {
         // Given
         User user = userRepository.findUserById(savedUserId).orElseThrow();
         Product product = productRepository.getById(savedProductId);
-        CouponIssue couponIssue = couponIssueRepository.getByIdWithLock(savedCouponIssueId);
+        CouponIssue couponIssue = couponIssueRepository.getById(savedCouponIssueId);
 
         OrderRequest orderRequest = createOrderRequest(product.getId(), 1, couponIssue.getCoupon().getId());
 
@@ -118,7 +118,7 @@ public class OrderControllerIntegrationTest {
         Point updatedPoint = pointRepository.getByUserId(user.getId()).orElseThrow();
         assertTrue(updatedPoint.getPoint() < 100000);
 
-        CouponIssue updatedCoupon = couponIssueRepository.getByIdWithLock(couponIssue.getId());
+        CouponIssue updatedCoupon = couponIssueRepository.getById(couponIssue.getId());
         assertTrue(updatedCoupon.isUsed());
 
         Order savedOrder = orderRepository.findLatestOrderByUserId(user.getId());

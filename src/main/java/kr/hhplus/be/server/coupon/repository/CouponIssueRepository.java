@@ -9,7 +9,7 @@ public interface CouponIssueRepository {
 
     CouponIssue save(CouponIssue couponIssue);
 
-    CouponIssue getByIdWithLock(long couponId);
+    CouponIssue getById(long couponId);
 
     long countByCouponId(Long id);
 }

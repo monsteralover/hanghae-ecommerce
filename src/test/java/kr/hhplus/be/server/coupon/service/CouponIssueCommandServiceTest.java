@@ -94,7 +94,7 @@ class CouponIssueCommandServiceTest {
         ReflectionTestUtils.setField(coupon, "expireDate", LocalDate.now().plusDays(30));
         final CouponIssue couponIssue = createCouponIssue(user, coupon);
 
-        given(couponIssueRepository.getByIdWithLock(couponId)).willReturn(couponIssue);
+        given(couponIssueRepository.getById(couponId)).willReturn(couponIssue);
 
         // when
         final int result = couponIssueCommandService.useCoupon(userId, couponId);
@@ -117,7 +117,7 @@ class CouponIssueCommandServiceTest {
         final Coupon coupon = createCoupon(10000);
         final CouponIssue couponIssue = createCouponIssue(owner, coupon);
 
-        given(couponIssueRepository.getByIdWithLock(couponId)).willReturn(couponIssue);
+        given(couponIssueRepository.getById(couponId)).willReturn(couponIssue);
 
         // when & then
         assertThatThrownBy(() -> couponIssueCommandService.useCoupon(differentUserId, couponId))

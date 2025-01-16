@@ -2,8 +2,8 @@ package kr.hhplus.be.server.order.facade;
 
 import kr.hhplus.be.server.coupon.facade.OrderFacadeRequest;
 import kr.hhplus.be.server.coupon.service.CouponIssueCommandService;
-import kr.hhplus.be.server.order.service.dto.DataPlatform;
-import kr.hhplus.be.server.order.service.dto.OrderItemCommandService;
+import kr.hhplus.be.server.order.service.DataPlatform;
+import kr.hhplus.be.server.order.service.OrderItemCommandService;
 import kr.hhplus.be.server.order.service.dto.SaveOrderResponse;
 import kr.hhplus.be.server.point.service.PointCommandService;
 import kr.hhplus.be.server.product.service.ProductStockCommandService;
@@ -26,9 +26,11 @@ public class OrderFacade {
     @Transactional
     public OrderResponse order(final OrderFacadeRequest request) {
         final long userId = request.getUserId();
-        userReadService.checkUserExistsById(userId);
+        userReadService.findByUserIdWithLock(userId);
+
         //쿠폰사용
         final int discountAmount = couponIssueCommandService.useCoupon(userId, request.getCouponId());
+
         //주문 저장
         final SaveOrderResponse saveOrderResponse =
                 orderItemCommandService.saveOrder(request.toOrderServiceRequest(discountAmount));
