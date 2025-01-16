@@ -6,11 +6,14 @@ import kr.hhplus.be.server.coupon.repository.CouponIssueRepository;
 import kr.hhplus.be.server.coupon.repository.CouponRepository;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.transaction.TestTransaction;
+import org.testcontainers.utility.TestcontainersConfiguration;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DisplayName("쿠폰 동시성 테스트")
+@Import(TestcontainersConfiguration.class)
 class CouponConcurrentTest {
 
     @Autowired
@@ -35,6 +39,13 @@ class CouponConcurrentTest {
     private CouponRepository couponRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @AfterEach
+    void tearDown() {
+        userRepository.deleteAll();
+        couponIssueRepository.deleteAll();
+        couponRepository.deleteAll();
+    }
 
     @Test
     @Transactional

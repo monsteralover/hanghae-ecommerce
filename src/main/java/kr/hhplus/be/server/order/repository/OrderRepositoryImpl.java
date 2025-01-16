@@ -23,4 +23,9 @@ public class OrderRepositoryImpl implements OrderRepository {
     public Order findLatestOrderByUserId(final Long id) {
         return orderJpaRepository.findAllByUserIdOrderByCreatedDateDesc(id).get(0);
     }
+
+    @Override
+    public void deleteAll() {
+        orderJpaRepository.deleteAll();
+    }
 }

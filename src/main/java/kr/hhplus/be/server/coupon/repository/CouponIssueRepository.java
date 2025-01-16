@@ -12,4 +12,6 @@ public interface CouponIssueRepository {
     CouponIssue getById(long couponId);
 
     long countByCouponId(Long id);
+
+    void deleteAll();
 }

@@ -9,4 +9,6 @@ public interface OrderRepository {
     void flush();
 
     Order findLatestOrderByUserId(Long id);
+
+    void deleteAll();
 }

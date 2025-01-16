@@ -8,4 +8,6 @@ public interface CouponRepository {
     Coupon save(Coupon coupon);
 
     Coupon getCouponById(Long couponId);
+
+    void deleteAll();
 }
