@@ -2,6 +2,7 @@ package kr.hhplus.be.server.point.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import kr.hhplus.be.server.ApiResponse;
 import kr.hhplus.be.server.point.facade.PointFacade;
 import kr.hhplus.be.server.point.service.dto.PointResponse;
@@ -25,7 +26,7 @@ public class PointController {
 
     @PostMapping("/{userId}/charge")
     public ApiResponse<PointResponse> chargeUserPoint(@Parameter(description = "사용자 ID") @PathVariable Long userId,
-                                                      @RequestBody PointChargeRequest request) {
+                                                      @RequestBody @Valid PointChargeRequest request) {
 
         return ApiResponse.ok(pointFacade.chargeUserPoint(userId, request.toFacadeRequest()));
     }

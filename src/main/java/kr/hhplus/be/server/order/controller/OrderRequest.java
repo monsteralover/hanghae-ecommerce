@@ -2,6 +2,7 @@ package kr.hhplus.be.server.order.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import kr.hhplus.be.server.coupon.facade.OrderFacadeRequest;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class OrderRequest {
     @Schema(description = "주문할 상품 목록")
     @JsonProperty("orderItems")
     @NotNull
+    @Valid
     private List<OrderRequestItems> orderItems;
 
     @Schema(description = "적용할 쿠폰 ID")

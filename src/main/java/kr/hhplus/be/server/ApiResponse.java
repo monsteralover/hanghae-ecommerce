@@ -48,6 +48,11 @@ public class ApiResponse<T> {
         return new ApiResponse<>(HttpStatus.BAD_REQUEST, code, message, null);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static <T> ApiResponse<T> badRequest(int code, String message, T data) {
+        return new ApiResponse<>(HttpStatus.BAD_REQUEST, code, message, data);
+    }
+
     @ResponseStatus(HttpStatus.CONFLICT)
     public static <T> ApiResponse<T> conflict(int code, String message) {
         return new ApiResponse<>(HttpStatus.CONFLICT, code, message, null);

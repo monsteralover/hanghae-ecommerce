@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.order.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +14,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderRequestItems {
     @JsonProperty("productId")
-    private Long productId;
+    @NotNull
+    @Positive
+    private long productId;
+
     @JsonProperty("quantity")
-    private Integer quantity;
+    @NotNull
+    @Positive
+    private int quantity;
 }
