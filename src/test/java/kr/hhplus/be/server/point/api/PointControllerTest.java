@@ -5,18 +5,25 @@ import kr.hhplus.be.server.point.domain.Point;
 import kr.hhplus.be.server.point.repository.PointRepository;
 import kr.hhplus.be.server.point.service.dto.PointResponse;
 import kr.hhplus.be.server.user.service.UserReadService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest
+@Testcontainers
+@ActiveProfiles("test")
+@Transactional
 class PointControllerTest {
 
     @Autowired
@@ -36,6 +43,12 @@ class PointControllerTest {
         doNothing().when(userReadService).checkUserExistsById(testUserId);
 
     }
+
+    @AfterEach
+    void tearDown() {
+        pointRepository.deleteAll();
+    }
+
 
     @Test
     @DisplayName("포인트가 없는 사용자의 포인트 조회시 0을 반환한다")
