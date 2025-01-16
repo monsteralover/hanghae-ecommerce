@@ -26,6 +26,11 @@ spring:
       path: /api-docs
     swagger-ui:
       path: /swagger-ui.html
+logging:
+  file:
+    name: ./logs/application.log
+  custom:
+    access-log: ./logs/access/access.log
 ---
 spring.config.activate.on-profile: local, test
 
