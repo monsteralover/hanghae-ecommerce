@@ -4,6 +4,8 @@ import kr.hhplus.be.server.order.domain.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class OrderRepositoryImpl implements OrderRepository {
@@ -27,5 +29,10 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public void deleteAll() {
         orderJpaRepository.deleteAll();
+    }
+
+    @Override
+    public List<Order> findAllByUserId(final long savedUserId) {
+        return orderJpaRepository.findAllByUserId(savedUserId);
     }
 }

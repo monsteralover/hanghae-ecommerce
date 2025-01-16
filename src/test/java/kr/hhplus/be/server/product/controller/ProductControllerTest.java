@@ -8,6 +8,7 @@ import kr.hhplus.be.server.product.domain.Product;
 import kr.hhplus.be.server.product.domain.ProductStock;
 import kr.hhplus.be.server.product.repository.ProductRepository;
 import kr.hhplus.be.server.product.service.dto.ProductMostSoldResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,6 +81,11 @@ class ProductControllerTest {
 
         entityManager.flush();
         entityManager.clear();
+    }
+
+    @AfterEach
+    void tearDown() {
+        productRepository.deleteAll();
     }
 
     @Test
