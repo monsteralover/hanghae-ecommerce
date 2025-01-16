@@ -17,6 +17,7 @@ public class OrderItem extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
+    @Getter
     private Product product;
 
     @ManyToOne
