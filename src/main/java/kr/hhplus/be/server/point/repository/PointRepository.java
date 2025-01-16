@@ -8,4 +8,6 @@ public interface PointRepository {
     Optional<Point> getByUserId(Long userId);
 
     Point save(Point point);
+
+    void deleteAll();
 }

@@ -33,4 +33,9 @@ public class CouponIssueRepositoryImpl implements CouponIssueRepository {
     public long countByCouponId(final Long couponId) {
         return couponIssueJpaRepository.countByCouponId(couponId);
     }
+
+    @Override
+    public void deleteAll() {
+        couponIssueJpaRepository.deleteAll();
+    }
 }

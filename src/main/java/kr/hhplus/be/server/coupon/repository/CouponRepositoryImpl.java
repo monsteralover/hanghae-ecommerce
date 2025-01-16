@@ -28,4 +28,9 @@ public class CouponRepositoryImpl implements CouponRepository {
                 .orElseThrow(() -> new ApiException(ApiResponseCodeMessage.INVALID_COUPON));
     }
 
+    @Override
+    public void deleteAll() {
+        couponJpaRepository.deleteAll();
+    }
+
 }

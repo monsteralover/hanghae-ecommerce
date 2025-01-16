@@ -26,4 +26,9 @@ public class ProductStockRepositoryImpl implements ProductStockRepository {
     public void save(final ProductStock productStock) {
         jpaRepository.save(productStock);
     }
+
+    @Override
+    public void deleteAll() {
+        jpaRepository.deleteAll();
+    }
 }

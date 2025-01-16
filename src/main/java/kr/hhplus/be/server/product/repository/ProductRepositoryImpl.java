@@ -57,5 +57,10 @@ public class ProductRepositoryImpl implements ProductRepository {
         return foundProducts;
     }
 
+    @Override
+    public void deleteAll() {
+        productJpaRepository.deleteAll();
+    }
+
 
 }

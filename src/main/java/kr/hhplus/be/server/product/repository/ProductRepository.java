@@ -17,4 +17,6 @@ public interface ProductRepository {
     Product save(Product product);
 
     List<Product> getAllById(Set<Long> productIds);
+
+    void deleteAll();
 }

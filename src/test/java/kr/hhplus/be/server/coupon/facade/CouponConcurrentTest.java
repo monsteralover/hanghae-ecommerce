@@ -1,19 +1,25 @@
 package kr.hhplus.be.server.coupon.facade;
 
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import kr.hhplus.be.server.coupon.domain.Coupon;
 import kr.hhplus.be.server.coupon.repository.CouponIssueRepository;
 import kr.hhplus.be.server.coupon.repository.CouponRepository;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -23,40 +29,59 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DisplayName("쿠폰 동시성 테스트")
+@Testcontainers
+@ActiveProfiles("test")
 class CouponConcurrentTest {
 
     @Autowired
     private CouponFacade couponFacade;
-
     @Autowired
     private CouponIssueRepository couponIssueRepository;
-
     @Autowired
     private CouponRepository couponRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @AfterEach
+    void tearDown() {
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.execute(status -> {
+            userRepository.deleteAll();
+            couponIssueRepository.deleteAll();
+            couponRepository.deleteAll();
+            entityManager.flush();
+            entityManager.clear();
+            return null;
+        });
+    }
 
     @Test
-    @Transactional
     @DisplayName("선착순 쿠폰의 발급수와 실제 발급받은 유저수가 동일해야한다")
     void concurrentCouponIssue() throws InterruptedException {
         // Given
         final int totalQuantity = 10;
         final int numberOfThreads = 20;
-        final List<Long> successfulIssues = new ArrayList<>();
+        final List<Long> successfulIssues = Collections.synchronizedList(new ArrayList<>());
 
-        List<Long> userIds = new ArrayList<>();
-        for (int i = 1; i <= numberOfThreads; i++) {
-            User user = new User();
-            User savedUser = userRepository.save(user);
-            userIds.add(savedUser.getId());
-        }
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
 
-        Coupon coupon = createTestCoupon(totalQuantity);
+        List<Long> userIds = transactionTemplate.execute(status -> {
+            List<Long> ids = new ArrayList<>();
+            for (int i = 1; i <= numberOfThreads; i++) {
+                User user = new User();
+                User savedUser = userRepository.save(user);
+                ids.add(savedUser.getId());
+            }
+            return ids;
+        });
 
-        //유저 생성을 위해 커밋한다.
-        TestTransaction.flagForCommit();
-        TestTransaction.end();
+        Coupon coupon = transactionTemplate.execute(status ->
+                createTestCoupon(totalQuantity)
+        );
 
         System.out.println("Created coupon with ID: " + coupon.getId() +
                 " total quantity: " + totalQuantity +
@@ -71,11 +96,13 @@ class CouponConcurrentTest {
             final Long userId = userIds.get(i);
             executorService.submit(() -> {
                 try {
-                    couponFacade.issueCouponForUser(userId, coupon.getId());
-                    synchronized (successfulIssues) {
+                    TransactionTemplate innerTransactionTemplate = new TransactionTemplate(transactionManager);
+                    innerTransactionTemplate.execute(status -> {
+                        couponFacade.issueCouponForUser(userId, coupon.getId());
                         successfulIssues.add(userId);
                         System.out.println("User " + userId + " successfully got a coupon");
-                    }
+                        return null;
+                    });
                 } catch (Exception e) {
                     System.out.println("User " + userId + " failed to get coupon: " + e.getMessage());
                 } finally {
@@ -88,28 +115,30 @@ class CouponConcurrentTest {
         executorService.shutdown();
         Thread.sleep(500);
 
-        // assertion을 위한 새 트랜잭션 시작
-        TestTransaction.start();
+        //assertion을 위한 새 트랜잭션 시작
+        TransactionTemplate assertionTransactionTemplate = new TransactionTemplate(transactionManager);
+        assertionTransactionTemplate.execute(status -> {
+            long actualIssuedCount = couponIssueRepository.countByCouponId(coupon.getId());
+            Coupon updatedCoupon = couponRepository.getCouponById(coupon.getId());
 
-        // Then
-        long actualIssuedCount = couponIssueRepository.countByCouponId(coupon.getId());
-        Coupon updatedCoupon = couponRepository.getCouponById(coupon.getId());
+            System.out.println("Final issued count: " + actualIssuedCount);
+            System.out.println("Successful issues: " + successfulIssues.size());
+            System.out.println("Final remaining quantity: " + updatedCoupon.getRemainingQuantity());
 
-        System.out.println("Final issued count: " + actualIssuedCount);
-        System.out.println("Successful issues: " + successfulIssues.size());
-        System.out.println("Final remaining quantity: " + updatedCoupon.getRemainingQuantity());
+            assertThat(actualIssuedCount)
+                    .as("발급된 쿠폰 수가 초기 수량과 일치해야 합니다")
+                    .isEqualTo(totalQuantity);
 
-        assertThat(actualIssuedCount)
-                .as("발급된 쿠폰 수가 초기 수량과 일치해야 합니다")
-                .isEqualTo(totalQuantity);
+            assertThat(updatedCoupon.getRemainingQuantity())
+                    .as("남은 쿠폰 수량이 0이어야 합니다")
+                    .isZero();
 
-        assertThat(updatedCoupon.getRemainingQuantity())
-                .as("남은 쿠폰 수량이 0이어야 합니다")
-                .isZero();
+            assertThat(successfulIssues)
+                    .as("성공적으로 발급된 횟수가 초기 수량과 일치해야 합니다")
+                    .hasSize(totalQuantity);
 
-        assertThat(successfulIssues)
-                .as("성공적으로 발급된 횟수가 초기 수량과 일치해야 합니다")
-                .hasSize(totalQuantity);
+            return null;
+        });
     }
 
     private Coupon createTestCoupon(int quantity) {

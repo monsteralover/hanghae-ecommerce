@@ -2,24 +2,28 @@ package kr.hhplus.be.server.product.controller;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import kr.hhplus.be.server.ApiResponse;
 import kr.hhplus.be.server.product.domain.Product;
 import kr.hhplus.be.server.product.domain.ProductStock;
 import kr.hhplus.be.server.product.repository.ProductRepository;
 import kr.hhplus.be.server.product.service.dto.ProductMostSoldResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
+@Testcontainers
+@ActiveProfiles("test")
 class ProductControllerTest {
 
     @Autowired
@@ -78,12 +82,18 @@ class ProductControllerTest {
         savedProduct2 = productRepository.save(product2);
         savedProduct3 = productRepository.save(product3);
 
+    }
+
+    @AfterEach
+    void tearDown() {
+        productRepository.deleteAll();
         entityManager.flush();
         entityManager.clear();
     }
 
     @Test
     @DisplayName("판매량 기준 상위 5개 상품을 조회한다")
+    @Transactional
     void getBestProducts_returns_top_five_products() {
         // when
         ApiResponse<List<ProductMostSoldResponse>> response = productController.getBestProducts();

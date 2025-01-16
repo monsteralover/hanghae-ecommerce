@@ -26,4 +26,9 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findByUserIdWithLock(final long userId) {
         return userJpaRepository.findById(userId);
     }
+
+    @Override
+    public void deleteAll() {
+        userJpaRepository.deleteAll();
+    }
 }

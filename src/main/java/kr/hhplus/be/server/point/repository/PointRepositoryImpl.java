@@ -20,4 +20,9 @@ public class PointRepositoryImpl implements PointRepository {
     public Point save(final Point point) {
         return pointJpaRepository.save(point);
     }
+
+    @Override
+    public void deleteAll() {
+        pointJpaRepository.deleteAll();
+    }
 }

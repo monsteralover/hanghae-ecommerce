@@ -30,7 +30,7 @@ public class CouponIssueCommandService {
 
     public int useCoupon(final long userId, final Long couponId) {
 
-        if (couponId == null) {
+        if (couponId == null || couponId == 0) {
             return 0;
         }
 

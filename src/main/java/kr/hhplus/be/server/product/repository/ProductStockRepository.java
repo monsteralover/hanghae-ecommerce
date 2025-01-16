@@ -8,4 +8,6 @@ public interface ProductStockRepository {
     ProductStock getByProductId(Long productId);
 
     void save(ProductStock productStock);
+
+    void deleteAll();
 }
