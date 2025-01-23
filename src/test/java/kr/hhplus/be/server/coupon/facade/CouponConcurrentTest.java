@@ -2,14 +2,17 @@ package kr.hhplus.be.server.coupon.facade;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import kr.hhplus.be.server.RedisConfig;
 import kr.hhplus.be.server.coupon.domain.Coupon;
 import kr.hhplus.be.server.coupon.repository.CouponIssueRepository;
 import kr.hhplus.be.server.coupon.repository.CouponRepository;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -45,6 +48,15 @@ class CouponConcurrentTest {
     private PlatformTransactionManager transactionManager;
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private RedisConfig redissonConfig;
+
+    @BeforeEach
+    void setUp() {
+        RedissonClient redisson = redissonConfig.redisson();
+        redisson.getKeys().flushall();
+    }
 
     @AfterEach
     void tearDown() {
@@ -113,7 +125,7 @@ class CouponConcurrentTest {
 
         latch.await();
         executorService.shutdown();
-        Thread.sleep(500);
+        Thread.sleep(1000);
 
         //assertion을 위한 새 트랜잭션 시작
         TransactionTemplate assertionTransactionTemplate = new TransactionTemplate(transactionManager);

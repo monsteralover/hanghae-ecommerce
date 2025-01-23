@@ -1,6 +1,7 @@
 package kr.hhplus.be.server;
 
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -39,28 +40,34 @@ public class LogFilter implements Filter {
         try {
             chain.doFilter(requestWrapper, responseWrapper);
         } finally {
-            String requestBody = new String(requestWrapper.getContentAsByteArray());
-            String responseBody = new String(responseWrapper.getContentAsByteArray());
+            try {
+                String requestBody = new String(requestWrapper.getContentAsByteArray());
+                String responseBody = new String(responseWrapper.getContentAsByteArray());
 
-            Map<String, Object> requestLog = new LinkedHashMap<>();
-            requestLog.put("method", requestWrapper.getMethod());
-            requestLog.put("uri", requestWrapper.getRequestURI());
-            requestLog.put("params", getParameters(requestWrapper));
-            requestLog.put("body", requestBody.isEmpty() ? "{}" : objectMapper.readTree(requestBody));
+                Map<String, Object> requestLog = new LinkedHashMap<>();
+                requestLog.put("method", requestWrapper.getMethod());
+                requestLog.put("uri", requestWrapper.getRequestURI());
+                requestLog.put("params", getParameters(requestWrapper));
+                requestLog.put("body", requestBody.isEmpty() ? "{}" : objectMapper.readTree(requestBody));
 
-            long duration = System.currentTimeMillis() - startTime;
+                long duration = System.currentTimeMillis() - startTime;
 
-            Map<String, Object> responseLog = new LinkedHashMap<>();
-            requestLog.put("method", requestWrapper.getMethod());
-            responseLog.put("uri", requestWrapper.getRequestURI());
-            responseLog.put("status", responseWrapper.getStatus());
-            responseLog.put("body", responseBody.isEmpty() ? "{}" : objectMapper.readTree(responseBody));
-            responseLog.put("duration", duration + "ms");
+                Map<String, Object> responseLog = new LinkedHashMap<>();
+                requestLog.put("method", requestWrapper.getMethod());
+                responseLog.put("uri", requestWrapper.getRequestURI());
+                responseLog.put("status", responseWrapper.getStatus());
+                responseLog.put("body", responseBody.isEmpty() ? "{}" : objectMapper.readTree(responseBody));
+                responseLog.put("duration", duration + "ms");
 
-            log.info("REQUEST: {}", objectMapper.writeValueAsString(requestLog), duration);
-            log.info("RESPONSE: {}", objectMapper.writeValueAsString(responseLog));
+                log.info("REQUEST: {}", objectMapper.writeValueAsString(requestLog), duration);
+                log.info("RESPONSE: {}", objectMapper.writeValueAsString(responseLog));
+            } catch (JsonParseException e) {
+                log.info(e.getMessage());
+            } finally {
 
-            responseWrapper.copyBodyToResponse();
+                responseWrapper.copyBodyToResponse();
+            }
+
         }
 
     }

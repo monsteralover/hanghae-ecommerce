@@ -43,14 +43,14 @@ class CouponCommandServiceTest {
     @DisplayName("쿠폰 수량 차감이 정상적으로 동작한다")
     void deductQuantityWithLock_Success() {
         // given
-        given(couponRepository.getCouponWithLock(1L)).willReturn(coupon);
+        given(couponRepository.getCouponById(1L)).willReturn(coupon);
         willAnswer(invocation -> invocation.getArgument(0)).given(couponRepository).save(any(Coupon.class));
 
         // when
-        couponCommandService.deductQuantityWithLock(1L);
+        couponCommandService.deductQuantity(1L);
 
         // then
-        verify(couponRepository).getCouponWithLock(1L);
+        verify(couponRepository).getCouponById(1L);
         verify(couponRepository).save(coupon);
     }
 

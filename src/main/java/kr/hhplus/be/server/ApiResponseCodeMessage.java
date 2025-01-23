@@ -17,6 +17,8 @@ public enum ApiResponseCodeMessage {
     INVALID_COUPON(3002, "존재하지 않는 쿠폰입니다."),
     COUPON_EXPIRED(3002, "사용기한이 지난 쿠폰입니다."),
     COUPON_USER_UNMATCHED(3003, "해당 사용자에게 부여된 쿠폰이 아닙니다."),
+    FAILED_TO_ISSUE_COUPON(3004, "쿠폰 발급에 실패했습니다."),
+    ALREADY_ISSUED_COUPON(3005, "이미 발급된 쿠폰입니다"),
 
     //order 4000
     OUT_OF_STOCK(4001, "상품의 재고가 소진되었습니다."),

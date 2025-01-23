@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 public class CouponCommandService {
     private final CouponRepository couponRepository;
 
-    public void deductQuantityWithLock(final Long couponId) {
-        final Coupon coupon = couponRepository.getCouponWithLock(couponId);
+    public void deductQuantity(final Long couponId) {
+        final Coupon coupon = couponRepository.getCouponById(couponId);
         coupon.validateCouponIssue();
         coupon.deductQuantity();
         couponRepository.save(coupon);
