@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.coupon.facade;
 
+import kr.hhplus.be.server.ApiException;
+import kr.hhplus.be.server.ApiResponseCodeMessage;
 import kr.hhplus.be.server.coupon.service.CouponCommandService;
 import kr.hhplus.be.server.coupon.service.CouponIssueCommandService;
 import kr.hhplus.be.server.coupon.service.CouponIssueReadService;
@@ -7,10 +9,12 @@ import kr.hhplus.be.server.coupon.service.dto.CouponIssueResponse;
 import kr.hhplus.be.server.coupon.service.dto.CouponUserResponse;
 import kr.hhplus.be.server.user.service.UserReadService;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Component
@@ -18,17 +22,37 @@ public class CouponFacade {
     private final UserReadService userReadService;
     private final CouponIssueReadService couponIssueReadService;
     private final CouponCommandService couponCommandService;
-
     private final CouponIssueCommandService couponIssueCommandService;
+    private final RedissonClient redissonClient;
+    private static final String LOCK_PREFIX = "COUPON_LOCK:";
+    private static final long WAIT_TIME = 3L;
+    private static final long LEASE_TIME = 5L;
+
+    private final CouponIssueFacade couponIssueFacade;
+
 
     public List<CouponUserResponse> getUsableCouponsForUser(Long userId) {
         userReadService.checkUserExistsById(userId);
         return couponIssueReadService.getUsableCouponsForUser(userId);
     }
 
-    @Transactional
     public CouponIssueResponse issueCouponForUser(Long userId, Long couponId) {
-        couponCommandService.deductQuantityWithLock(couponId);
-        return couponIssueCommandService.saveCouponIssue(userId, couponId);
+        RLock lock = redissonClient.getLock(LOCK_PREFIX + couponId);
+
+        try {
+            boolean isLocked = lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
+            if (!isLocked) {
+                throw new ApiException(ApiResponseCodeMessage.FAILED_TO_ISSUE_COUPON);
+            }
+            return couponIssueFacade.issueCoupon(userId, couponId);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new ApiException(ApiResponseCodeMessage.FAILED_TO_ISSUE_COUPON);
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
+        }
     }
+
 }
