@@ -68,6 +68,9 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
+    // Redis
+    implementation("org.redisson:redisson-spring-boot-starter:3.27.1")
+
     // DB
     runtimeOnly("com.mysql:mysql-connector-j")
 
