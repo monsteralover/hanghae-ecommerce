@@ -40,7 +40,7 @@ public class Coupon extends BaseEntity {
 
     public void validateCouponIssue() {
         validateCouponExpired();
-        validateRemainingQuantity();
+        //validateRemainingQuantity();
     }
 
     private void validateRemainingQuantity() {
@@ -50,9 +50,13 @@ public class Coupon extends BaseEntity {
     }
 
     public void validateCouponExpired() {
-        if (this.getExpireDate().isBefore(LocalDate.now())) {
+        if (isCouponExpired()) {
             throw new ApiException(ApiResponseCodeMessage.COUPON_EXPIRED);
         }
+    }
+
+    public boolean isCouponExpired() {
+        return this.getExpireDate().isAfter(LocalDate.now());
     }
 
     public void deductQuantity() {
