@@ -17,7 +17,7 @@ public class CouponIssueFacade {
 
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     CouponIssueResponse issueCoupon(final Long userId, final Long couponId) {
-        couponCommandService.deductQuantity(couponId);
+        //couponCommandService.deductQuantity(couponId);
         return couponIssueCommandService.saveCouponIssue(userId, couponId);
     }
 }

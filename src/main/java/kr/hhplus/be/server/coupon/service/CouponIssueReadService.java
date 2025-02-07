@@ -6,7 +6,6 @@ import kr.hhplus.be.server.coupon.service.dto.CouponUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,10 +16,7 @@ public class CouponIssueReadService {
 
     public List<CouponUserResponse> getUsableCouponsForUser(final Long userId) {
         final List<CouponIssue> couponIssues = couponIssueRepository.getUsableCouponsForUser(userId).stream()
-                .filter(issue -> {
-                    final LocalDate expireDate = issue.getCoupon().getExpireDate();
-                    return expireDate.equals(LocalDate.now()) || expireDate.isAfter(LocalDate.now());
-                })
+                .filter(issue -> issue.getCoupon().isCouponExpired())
                 .collect(Collectors.toList());
         return CouponUserResponse.from(couponIssues);
     }
