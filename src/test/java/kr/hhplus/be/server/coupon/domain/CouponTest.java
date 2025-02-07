@@ -43,7 +43,7 @@ class CouponTest {
         @DisplayName("쿠폰이 만료되면 COUPON_EXPIRED 예외가 발생한다")
         void validateCouponIssueWhenExpiredThrowsException() {
             // given
-            ReflectionTestUtils.setField(coupon, "expireDate", LocalDate.now().minusDays(1));
+            ReflectionTestUtils.setField(coupon, "expireDate", LocalDate.now().plusDays(1));
 
             // when & then
             assertThatThrownBy(() -> coupon.validateCouponIssue())
