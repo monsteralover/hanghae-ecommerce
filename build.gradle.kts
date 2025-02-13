@@ -80,6 +80,8 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mysql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("com.redis.testcontainers:testcontainers-redis:1.6.4")
+
 }
 
 tasks.withType<Test> {
