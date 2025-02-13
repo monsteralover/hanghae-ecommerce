@@ -2,13 +2,14 @@ package kr.hhplus.be.server.order.facade;
 
 import kr.hhplus.be.server.coupon.facade.OrderFacadeRequest;
 import kr.hhplus.be.server.coupon.service.CouponIssueCommandService;
-import kr.hhplus.be.server.order.service.DataPlatform;
+import kr.hhplus.be.server.order.OrderCalledEvent;
 import kr.hhplus.be.server.order.service.OrderItemCommandService;
 import kr.hhplus.be.server.order.service.dto.SaveOrderResponse;
 import kr.hhplus.be.server.point.service.PointCommandService;
 import kr.hhplus.be.server.product.service.ProductStockCommandService;
 import kr.hhplus.be.server.user.service.UserReadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,12 @@ public class OrderFacade {
     private final CouponIssueCommandService couponIssueCommandService;
     private final PointCommandService pointCommandService;
     private final ProductStockCommandService productStockCommandService;
-    private final DataPlatform dataPlatform;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public OrderResponse order(final OrderFacadeRequest request) {
+        eventPublisher.publishEvent(new OrderCalledEvent(request));
+
         final long userId = request.getUserId();
         userReadService.findByUserIdWithLock(userId);
 
@@ -38,8 +41,6 @@ public class OrderFacade {
         pointCommandService.usePoint(userId, saveOrderResponse.getPaymentAmount());
         //재고차감
         productStockCommandService.processSoldStock(request.getOrderItems());
-
-        dataPlatform.sendData(request);
 
         return new OrderResponse(saveOrderResponse.getOrderId());
     }
