@@ -1,5 +1,6 @@
 package kr.hhplus.be.server;
 
+import com.redis.testcontainers.RedisContainer;
 import jakarta.annotation.PreDestroy;
 import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.GenericContainer;
@@ -19,7 +20,7 @@ class TestcontainersConfiguration {
                 .withPassword("test");
         MYSQL_CONTAINER.start();
 
-        REDIS_CONTAINER = new GenericContainer<>(DockerImageName.parse("redis:7.2"))
+        REDIS_CONTAINER = new RedisContainer(DockerImageName.parse("redis:7.2"))
                 .withExposedPorts(6379);
         REDIS_CONTAINER.start();
 
