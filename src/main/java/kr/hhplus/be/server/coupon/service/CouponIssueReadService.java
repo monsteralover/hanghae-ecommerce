@@ -16,7 +16,7 @@ public class CouponIssueReadService {
 
     public List<CouponUserResponse> getUsableCouponsForUser(final Long userId) {
         final List<CouponIssue> couponIssues = couponIssueRepository.getUsableCouponsForUser(userId).stream()
-                .filter(issue -> issue.getCoupon().isCouponExpired())
+                .filter(issue -> !issue.getCoupon().isCouponExpired())
                 .collect(Collectors.toList());
         return CouponUserResponse.from(couponIssues);
     }

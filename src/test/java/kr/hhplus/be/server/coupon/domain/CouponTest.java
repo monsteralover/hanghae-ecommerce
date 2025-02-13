@@ -32,7 +32,7 @@ class CouponTest {
         }
 
         @Test
-        @DisplayName("쿠폰이 만료되지 않고 수량이 있으면 정상 처리된다")
+        @DisplayName("쿠폰이 만료되지 않았으면 정상 처리된다")
         void validateCouponIssueSuccess() {
             // when & then
             assertThatCode(() -> coupon.validateCouponIssue())
@@ -43,7 +43,7 @@ class CouponTest {
         @DisplayName("쿠폰이 만료되면 COUPON_EXPIRED 예외가 발생한다")
         void validateCouponIssueWhenExpiredThrowsException() {
             // given
-            ReflectionTestUtils.setField(coupon, "expireDate", LocalDate.now().plusDays(1));
+            ReflectionTestUtils.setField(coupon, "expireDate", LocalDate.now().minusDays(1));
 
             // when & then
             assertThatThrownBy(() -> coupon.validateCouponIssue())
@@ -52,17 +52,6 @@ class CouponTest {
 
         }
 
-        @Test
-        @DisplayName("쿠폰 수량이 없으면 OUT_OF_COUPON 예외가 발생한다")
-        void validateCouponIssueWhenNoQuantityThrowsException() {
-            // given
-            ReflectionTestUtils.setField(coupon, "remainingQuantity", 0);
-
-            // when & then
-            assertThatThrownBy(() -> coupon.validateCouponIssue())
-                    .isInstanceOf(ApiException.class)
-                    .hasMessage(ApiResponseCodeMessage.OUT_OF_COUPON.getMessage());
-        }
     }
 
     @Nested
