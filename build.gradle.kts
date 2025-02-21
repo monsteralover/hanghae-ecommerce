@@ -71,6 +71,9 @@ dependencies {
     // Redis
     implementation("org.redisson:redisson-spring-boot-starter:3.27.1")
 
+    implementation("org.springframework.kafka:spring-kafka")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+
     // DB
     runtimeOnly("com.mysql:mysql-connector-j")
 

@@ -2,7 +2,7 @@ package kr.hhplus.be.server.order.facade;
 
 import kr.hhplus.be.server.coupon.facade.OrderFacadeRequest;
 import kr.hhplus.be.server.coupon.service.CouponIssueCommandService;
-import kr.hhplus.be.server.order.OrderCalledEvent;
+import kr.hhplus.be.server.order.OrderFinishedEvent;
 import kr.hhplus.be.server.order.service.OrderItemCommandService;
 import kr.hhplus.be.server.order.service.dto.SaveOrderResponse;
 import kr.hhplus.be.server.point.service.PointCommandService;
@@ -26,7 +26,6 @@ public class OrderFacade {
 
     @Transactional
     public OrderResponse order(final OrderFacadeRequest request) {
-        eventPublisher.publishEvent(new OrderCalledEvent(request));
 
         final long userId = request.getUserId();
         userReadService.findByUserIdWithLock(userId);
@@ -41,6 +40,8 @@ public class OrderFacade {
         pointCommandService.usePoint(userId, saveOrderResponse.getPaymentAmount());
         //재고차감
         productStockCommandService.processSoldStock(request.getOrderItems());
+
+        eventPublisher.publishEvent(OrderFinishedEvent.of(request));
 
         return new OrderResponse(saveOrderResponse.getOrderId());
     }
