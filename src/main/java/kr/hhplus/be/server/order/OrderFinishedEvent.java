@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.order;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import kr.hhplus.be.server.coupon.facade.OrderFacadeRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class OrderFinishedEvent {
+    @JsonProperty
     private String aggregateId;
+    @JsonProperty
     private OrderFacadeRequest request;
 
     public static OrderFinishedEvent of(OrderFacadeRequest request) {
