@@ -23,6 +23,7 @@ public class OrderEventConsumer {
         if (isSent) {
             Outbox outbox = outBoxRepository.findByAggregateId(event.getAggregateId());
             outbox.updateStatus(EventStatus.FINISHED);
+            outBoxRepository.save(outbox);
         }
     }
 }

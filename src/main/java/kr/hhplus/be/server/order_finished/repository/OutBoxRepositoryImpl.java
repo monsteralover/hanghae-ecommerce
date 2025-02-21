@@ -25,6 +25,6 @@ public class OutBoxRepositoryImpl implements OutBoxRepository {
     }
 
     public List<Outbox> findAllByEventStatus(EventStatus status) {
-        return outBoxJpaRepository.findAllByEventStatus(status);
+        return outBoxJpaRepository.findAllByStatus(status);
     }
 }

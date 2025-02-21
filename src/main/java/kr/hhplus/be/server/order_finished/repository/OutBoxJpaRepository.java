@@ -9,5 +9,5 @@ import java.util.List;
 public interface OutBoxJpaRepository extends JpaRepository<Outbox, Long> {
     Outbox findByAggregateId(String id);
 
-    List<Outbox> findAllByEventStatus(EventStatus status);
+    List<Outbox> findAllByStatus(EventStatus status);
 }

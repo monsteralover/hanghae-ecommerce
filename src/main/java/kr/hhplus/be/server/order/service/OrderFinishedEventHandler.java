@@ -26,6 +26,7 @@ public class OrderFinishedEventHandler {
     @TransactionalEventListener(phase = BEFORE_COMMIT)
     public void saveOutbox(OrderFinishedEvent event) {
         Outbox outbox = Outbox.create(
+                event.getAggregateId(),
                 EventType.ORDER_FINISHED_EVENT,
                 event,
                 EventStatus.INITIATED

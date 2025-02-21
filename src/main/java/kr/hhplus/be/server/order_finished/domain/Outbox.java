@@ -33,8 +33,9 @@ public class Outbox extends BaseEntity {
     private EventStatus status;
 
 
-    public static Outbox create(EventType eventType, OrderFinishedEvent payload, EventStatus status) {
+    public static Outbox create(String aggregateId, EventType eventType, OrderFinishedEvent payload, EventStatus status) {
         return Outbox.builder()
+                .aggregateId(aggregateId)
                 .eventType(eventType)
                 .payload(payload)
                 .status(status)
